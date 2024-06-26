@@ -1,10 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 import random
 import string
+
+from starlette.staticfiles import StaticFiles
 
 DATABASE_URL = "sqlite:///./test.db"
 Base = declarative_base()
@@ -19,6 +22,9 @@ app.add_middleware(
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
 )
+
+# Serve static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Database setup
 engine = create_engine(DATABASE_URL)
@@ -163,6 +169,11 @@ def get_state(user_id: str):
 
     db.close()
     return {"user_id": user.id, "current_question_id": user.current_question_id, "state": user.state}
+
+
+@app.get("/")
+def read_root():
+    return FileResponse('static/index.html')
 
 
 # Run the FastAPI application using uvicorn

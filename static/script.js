@@ -3,7 +3,7 @@ document.getElementById('start-button').addEventListener('click', startTest);
 let userId = null;
 
 function startTest() {
-    fetch('http://localhost:8000/start_test', {
+    fetch('/start_test', {
         method: 'POST'
     })
     .then(response => response.json())
@@ -14,7 +14,7 @@ function startTest() {
 }
 
 function getNextQuestion() {
-    fetch(`http://localhost:8000/next_question/${userId}`)
+    fetch(`/next_question/${userId}`)
     .then(response => response.json())
     .then(data => {
         if (data.result) {
@@ -44,7 +44,7 @@ function showQuestion(question) {
 }
 
 function sendAnswer(questionId, answerId) {
-    fetch('http://localhost:8000/answer', {
+    fetch('/answer', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
