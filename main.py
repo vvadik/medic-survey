@@ -1,13 +1,13 @@
+import urllib.parse
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 import random
 import string
-
-from starlette.staticfiles import StaticFiles
 
 DATABASE_URL = "sqlite:///./test.db"
 Base = declarative_base()
@@ -156,7 +156,9 @@ def answer_question(answer_request: AnswerRequest):
         user.state = "Completed"
         db.commit()
         db.close()
-        return {"result": "You are a creative person!"}
+        # Декодируем URL-кодированную строку перед возвращением
+        result_text = urllib.parse.unquote(answer.text)
+        return {"result": result_text}
 
 
 @app.get("/state/{user_id}", response_model=StateResponse)

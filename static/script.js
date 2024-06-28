@@ -70,5 +70,6 @@ function showResult(result) {
     document.getElementById('question-screen').style.display = 'none';
     document.getElementById('result-screen').style.display = 'block';
 
-    document.getElementById('result-text').innerText = result;
+    // Используем innerHTML для отображения HTML-кода
+    document.getElementById('result-text').innerHTML = result;
 }
